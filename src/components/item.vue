@@ -27,7 +27,10 @@ export default {
 		}
 	},
 	methods: {
-		delItem () {}
+		delItem () {
+			// this指item这个组件
+			this.$emit('del', this.todo.id);
+		}
 	}	
 }
 </script>
@@ -38,7 +41,7 @@ export default {
 		height: 58px;
 		background-color :#fff;
 		font-size: 24px;
-		border-bottom: 1px solid #999;
+		border: 1px solid #999;
 		box-shadow: 0 0 5px #666;
 		&:hover {
 			.destory:after {

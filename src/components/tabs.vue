@@ -1,12 +1,17 @@
 <template>
 	<div id="helper">
-		<!-- 不同类型的todo数量 -->
-		<span class="left">2 items left</span>
+		<!-- 需要动态计算的数据使用计算属性 -->
+		<span class="left">{{getUnCompletedLength}} items left</span>
 		<span class="tabs">
-			<!-- 绑定事件渲染不同的todo -->
-			<span class="button active">all</span>
-			<span class="button">active</span>
-			<span class="button">completed</span>
+			<!-- 多个重复的dom结构使用v-for渲染 -->
+			<span 
+				v-for="state in states"
+				:key="state"
+				:class="['button', filter === state ? 'active' : '']" 
+				@click="toggleFilter(state)"
+			>
+				{{state}}
+			</span>
 		</span>
 		<!-- 绑定事件：删除已完成 -->
 		<span class="right" @click="clearCompleted">Clear Completed</span>
@@ -15,9 +20,32 @@
 
 <script>
 	export default {
-		method: {
+		data() {
+			return {
+				states: ['all', 'active', 'completed']
+			}
+		},
+		props: {
+			todos: {
+				type: Array,
+				required: true
+			},
+			filter: {
+				type: String,
+				required: true
+			}
+		},
+		computed: {
+			getUnCompletedLength(todos) {
+				return this.todos.filter(todo => !todo.completed).length;
+			}
+		},
+		methods: {
+			toggleFilter(state) {
+				this.$emit('toggle', state);
+			},
 			clearCompleted() {
-
+				this.$emit('clear');
 			}
 		}
 	}
@@ -31,6 +59,7 @@
 		text-align: center;
 		background-color: #fff;
 		border: 1px solid #999;
+		color: #ccc;
 		box-shadow: 0 0 5px #666;
 		.left {
 			float: left;

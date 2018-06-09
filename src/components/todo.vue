@@ -6,10 +6,19 @@
 			name="addInput"
 			placeholder="接下来要做什么？" 
 			autofocus="" 
-			@keyup.enter="addItem()"
+			@keyup.enter="addItem"
 		>
-		<item :todo="todo"></item>
-		<tabs></tabs>
+		<item :todo="todo"
+			v-for="todo in filtedTodos"
+			:key="todo.id"
+			@del="delItem"
+		/>
+		<tabs 
+			:todos="todos"
+			:filter="filter"
+			@toggle="toggleFilter"
+			@clear="clearCompleted"
+		/>
 	</div>
 </template>
 
@@ -17,24 +26,53 @@
 import item from './item'
 import tabs from './tabs'
 
+let id = 0;
+
+// 数据和数据操作尽量放在顶层组件
 export default {
 	name: 'todo',
 	data () {
 		return {
-			todo: {
-				id: 0,
-				content: 'this is todo',
-				completed: false
-			}
+			todos: [],
+			filter: 'all'
 		}
 	},
 	components: {
 		item,
 		tabs
 	},
-	methods: {
-		addItem () {
+	computed: {
+		filtedTodos() {
+			if (this.filter === 'all') {
+				return this.todos;
+			}
 
+			const completed = this.filter === 'completed';
+			return this.todos.filter(todo => todo.completed === completed);
+
+		}
+	},
+	methods: {
+		addItem (e) {
+			// 此处的参数e事件对象，不需要再绑定事件时传入
+			let todoInput = e.target;
+			this.todos.unshift({
+				id: id++,
+				content: todoInput.value.trim(),
+				completed: false
+			});
+			todoInput.value = '';
+		},
+		delItem(id) {
+			let todos = this.todos;
+			todos.splice(todos.findIndex(todo => todo.id === id), 1);
+		},
+		toggleFilter(state) {
+			this.filter = state;
+			
+		},
+		clearCompleted() {
+			this.todos = this.todos.filter(todo => !todo.completed);
 		}
 	}
 }
