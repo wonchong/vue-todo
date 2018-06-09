@@ -38,7 +38,7 @@ export default {
 		height: 58px;
 		background-color :#fff;
 		font-size: 24px;
-		border: 1px solid #999;
+		border-bottom: 1px solid #999;
 		box-shadow: 0 0 5px #666;
 		&:hover {
 			.destory:after {
@@ -47,7 +47,7 @@ export default {
 		}
 		.toggle {
 			position: absolute;
-			left: 0;
+			left: 10px;
 			width: 40px;
 			line-height: 58px;
 			height: 100%;

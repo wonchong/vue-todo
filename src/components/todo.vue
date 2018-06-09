@@ -9,11 +9,13 @@
 			@keyup.enter="addItem()"
 		>
 		<item :todo="todo"></item>
+		<tabs></tabs>
 	</div>
 </template>
 
 <script>
 import item from './item'
+import tabs from './tabs'
 
 export default {
 	name: 'todo',
@@ -27,7 +29,8 @@ export default {
 		}
 	},
 	components: {
-		item
+		item,
+		tabs
 	},
 	methods: {
 		addItem () {
